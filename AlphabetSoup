@@ -90,6 +90,7 @@ void Player::move()
     float x = Accel.X();
     float y = Accel.Y();
 
+
     if(!checkEdge(positionX,positionY))
     {
         positionX+=x*10;
@@ -97,7 +98,7 @@ void Player::move()
     }
     else
     {
-        if (positionX>=320)
+        if (positionX+20>=319)
         {
              positionY-=y*10;
              if (x<0)
@@ -109,16 +110,16 @@ void Player::move()
              if (x>0)
                  positionX+=x*10;
         }
-        else if (positionY>=240)
+        else if (positionY+12>=239)
         {
              positionX+=x*10;
-             if (y<0)
+             if (y>0)
                  positionY-=y*10;
         }
         else if (positionY<=0)
         {
              positionX+=x*10;
-             if (y>0)
+             if (y<0)
                  positionY-=y*10;
         }
     }
@@ -126,7 +127,7 @@ void Player::move()
 
 bool checkEdge(int x, int y)
 {
-    if((x <= 0 || x >= 320) || (y <= 0 || y >= 240))
+    if((x <= 0 || x+ 12 >= 319) || (y <= 0 || y + 12 >= 239))
     {
         // if the x is less than zero or greater than 320 pixels, OR
         // if the y is less than zero or greater than 240 pixels
