@@ -2,11 +2,40 @@
 #include <FEHIO.h>
 #include <FEHUtility.h>
 #include <FEHAccel.h>
+#include <vector>
 
 void play();
 bool checkHit();
 void display();
 bool checkEdge(int, int);
+
+class Player
+{
+public:
+    movePlayer();
+
+
+private:
+   char playerChar;// the char for displaying the character
+   int positionX, positionY;
+   // x is always less than 320 and y less than 240
+};
+
+/*
+class Enemy
+{
+public:
+    Enemy( int x, int y, int speed)
+
+private:
+    int positionX, positionY;// screen size is 320 by 240
+    // x is always less than 320 and y less than 240
+    int speed = 5;// measured in pixels per cycle; each cycle is
+    int beginX, beginY;
+    int radius = 5; // measured in pixels; we'll display these later using
+    // FEHLCD .FillCircle
+};*/
+
 int main(void)
 {
     //main method stuff
