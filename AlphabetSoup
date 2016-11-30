@@ -1,0 +1,81 @@
+#include <FEHLCD.h>
+#include <FEHIO.h>
+#include <FEHUtility.h>
+#include <FEHAccel.h>
+
+void play();
+bool checkHit();
+void display();
+bool checkEdge(int, int);
+int main(void)
+{
+    //main method stuff
+}
+
+void play()
+{
+    int start = TimeNow();
+    int end = TimeNow();;
+    int mTime;
+    while(!checkHit())
+    {
+
+        display();//displaying every object at current location
+
+        mTime = TimeNow()-end; //getting time since last move
+
+        movePlayer(); //updating location of player
+        //moveEnemies(mTime); //updating locaiton of every enemy with mTime affecting speed
+
+        end = TimeNow();//keeping track of total time
+
+        if((end-start)%2.==0)
+        {
+            /*enemyVector.add(Enemy(rand x, rand y, speed))*/
+        }
+    }
+}
+
+void display()
+{
+    LCD.WriteAt(p.playerChar,p.positionX,p.positionY);
+    //for loop for each Enemy in enemyVector
+}
+
+void Player::move()
+{
+    if(!checkEdge(positionX,positionY))
+    {
+        int x = Accel.X();
+        int y = Accel.Y();
+
+        positionX+=x;
+        posittionY+=y;
+    }
+}
+
+bool checkEdge(int x, int y)
+{
+    if((x <= 0 || x >= 320) || (y <= 0 || y >= 240))
+    {
+        // if the x is less than zero or greater than 320 pixels, OR
+        // if the y is less than zero or greater than 240 pixels
+            // it is indeed at or past the edge
+       return true;
+
+
+    }
+    else return false;
+
+}
+
+bool checkHit()
+{
+    for(/*each Enemy in enemyVector*/)
+    {
+        if (p.positionX == e.positionX && p.positionY == e.positionY)
+            return true;
+    }
+
+    return false;
+}
