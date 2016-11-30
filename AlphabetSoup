@@ -23,20 +23,21 @@ private:
    // x is always less than 320 and y less than 240
 };
 
-/*
 class Enemy
 {
 public:
-    Enemy( int x, int y, int speed)
+    Enemy( int startx, int starty,int endx, int endy, int speed);
+    void moveEnemy();
 
 private:
     int positionX, positionY;// screen size is 320 by 240
     // x is always less than 320 and y less than 240
-    int speed = 5;// measured in pixels per cycle; each cycle is
+    int speed = 1;// measured in pixels per cycle
     int beginX, beginY;
+    int endX, endY;
     int radius = 5; // measured in pixels; we'll display these later using
     // FEHLCD .FillCircle
-};*/
+};
 
 Player p; //creating player object p
 
@@ -64,10 +65,19 @@ void play()
 
         end = TimeNow();//keeping track of total time
 
-        /*if((end-start)%2.==0)
-        {
-            enemyVector.add(Enemy(rand x, rand y, speed))
-        }*/
+          
+         
+    Enemy enemies[number_of_enemies];
+    for(int i = 0; i < number_of_enemies; i++)
+    {
+        // start and end x should be between 0 and 319
+        // start and end y should be between 0 and 239
+        // start x, sstart y, end x, end y, speed
+        
+        // all enemies should start at the top and end at the bottom for now
+        Enemy(rand() % 320,0,rand() % 320, 239, rand % 5);
+    }
+          
     }
 }
 
@@ -150,3 +160,17 @@ bool checkHit()
 
     return false;
 }
+
+void Enemy::moveEnemy()
+{
+    // for all enemies on screen
+    for(int i = 0; i < number_of_enemies; i++)
+    {
+        // move them one pixel down
+        // if it is at the edge, move it 
+        enemies[i].positionY ++;
+        
+    }
+    
+}
+
