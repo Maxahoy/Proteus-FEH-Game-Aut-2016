@@ -86,6 +86,7 @@ void Player::display()
 
 void Player::move()
 {
+/*
     if(!checkEdge(positionX,positionY))
     {
         int x = Accel.X();
@@ -93,7 +94,17 @@ void Player::move()
         LCD.WriteAt("Also here",0,0);
         positionX+=x;
         positionY+=y;
-    }
+    }*/
+    
+    LCD.Touch(&xTouch,&yTouch);
+    if(xTouch < 160)
+         positionX--;
+    else if(xTouch > 160)
+        positionX++;
+    if(yTouch < 120)
+        positionY--;
+    else if(yTouch > 120)
+        positionY++;
 }
 
 bool checkEdge(int x, int y)
