@@ -2,7 +2,7 @@
 #include <FEHIO.h>
 #include <FEHUtility.h>
 #include <FEHAccel.h>
-#include <vector>
+//#include <vector>
 
 void play();
 bool checkHit();
@@ -12,11 +12,13 @@ bool checkEdge(int, int);
 class Player
 {
 public:
-    movePlayer();
+    Player(char = 'a', int = 50, int = 50);
+    void move();
+    void display();
 
 
 private:
-   char playerChar;// the char for displaying the character
+    char playerChar;// the char for displaying the character
    int positionX, positionY;
    // x is always less than 320 and y less than 240
 };
@@ -36,38 +38,49 @@ private:
     // FEHLCD .FillCircle
 };*/
 
+Player p; //creating player object p
+
+
 int main(void)
 {
     //main method stuff
+    play();
 }
 
 void play()
 {
     int start = TimeNow();
-    int end = TimeNow();;
+    int end = TimeNow();
     int mTime;
     while(!checkHit())
     {
-
-        display();//displaying every object at current location
+        LCD.WriteAt("here",0,0);
+        p.display();//displaying every object at current location
 
         mTime = TimeNow()-end; //getting time since last move
 
-        movePlayer(); //updating location of player
+        p.move(); //updating location of player
         //moveEnemies(mTime); //updating locaiton of every enemy with mTime affecting speed
 
         end = TimeNow();//keeping track of total time
 
-        if((end-start)%2.==0)
+        /*if((end-start)%2.==0)
         {
-            /*enemyVector.add(Enemy(rand x, rand y, speed))*/
-        }
+            enemyVector.add(Enemy(rand x, rand y, speed))
+        }*/
     }
 }
 
-void display()
+Player::Player(char a, int x, int y)
 {
-    LCD.WriteAt(p.playerChar,p.positionX,p.positionY);
+    positionX = x;
+    positionY = y;
+    playerChar = a;
+}
+
+void Player::display()
+{
+    LCD.WriteAt(playerChar,positionX,positionY);
     //for loop for each Enemy in enemyVector
 }
 
@@ -77,9 +90,9 @@ void Player::move()
     {
         int x = Accel.X();
         int y = Accel.Y();
-
+        LCD.WriteAt("Also here",0,0);
         positionX+=x;
-        posittionY+=y;
+        positionY+=y;
     }
 }
 
@@ -100,11 +113,11 @@ bool checkEdge(int x, int y)
 
 bool checkHit()
 {
-    for(/*each Enemy in enemyVector*/)
+    /*for(each Enemy in enemyVector)
     {
         if (p.positionX == e.positionX && p.positionY == e.positionY)
             return true;
-    }
+    }*/
 
     return false;
 }
