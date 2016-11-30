@@ -54,7 +54,7 @@ void play()
     int mTime;
     while(!checkHit())
     {
-        LCD.WriteAt("here",0,0);
+        LCD.Clear(BLUE);
         p.display();//displaying every object at current location
 
         mTime = TimeNow()-end; //getting time since last move
@@ -80,31 +80,48 @@ Player::Player(char a, int x, int y)
 
 void Player::display()
 {
+
     LCD.WriteAt(playerChar,positionX,positionY);
     //for loop for each Enemy in enemyVector
 }
 
 void Player::move()
 {
-/*
+    float x = Accel.X();
+    float y = Accel.Y();
+
     if(!checkEdge(positionX,positionY))
     {
-        int x = Accel.X();
-        int y = Accel.Y();
-        LCD.WriteAt("Also here",0,0);
-        positionX+=x;
-        positionY+=y;
-    }*/
-    
-    LCD.Touch(&xTouch,&yTouch);
-    if(xTouch < 160)
-         positionX--;
-    else if(xTouch > 160)
-        positionX++;
-    if(yTouch < 120)
-        positionY--;
-    else if(yTouch > 120)
-        positionY++;
+        positionX+=x*10;
+        positionY-=y*10;
+    }
+    else
+    {
+        if (positionX>=320)
+        {
+             positionY-=y*10;
+             if (x<0)
+                 positionX+=x*10;
+        }
+        else if (positionX<=0)
+        {
+             positionY-=y*10;
+             if (x>0)
+                 positionX+=x*10;
+        }
+        else if (positionY>=240)
+        {
+             positionX+=x*10;
+             if (y<0)
+                 positionY-=y*10;
+        }
+        else if (positionY<=0)
+        {
+             positionX+=x*10;
+             if (y>0)
+                 positionY-=y*10;
+        }
+    }
 }
 
 bool checkEdge(int x, int y)
