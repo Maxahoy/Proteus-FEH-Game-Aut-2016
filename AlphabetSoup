@@ -2,6 +2,7 @@
 #include <FEHIO.h>
 #include <FEHUtility.h>
 #include <FEHAccel.h>
+#include <stdlib.h>
 //#include <vector>
 
 void play();
@@ -40,6 +41,7 @@ private:
 };
 
 Player p; //creating player object p
+Enemy enemyArray[number_of_enemies];
 
 
 int main(void)
@@ -66,19 +68,31 @@ void play()
         end = TimeNow();//keeping track of total time
 
           
-         
-    Enemy enemies[number_of_enemies];
+       
     for(int i = 0; i < number_of_enemies; i++)
     {
         // start and end x should be between 0 and 319
         // start and end y should be between 0 and 239
-        // start x, sstart y, end x, end y, speed
-        
+        // start x, start y, end x, end y, speed
+
         // all enemies should start at the top and end at the bottom for now
-        Enemy(rand() % 320,0,rand() % 320, 239, rand % 5);
+        enemyArray[i] = Enemy(rand() % 320,0,rand() % 320, 239, 1);
+        //
     }
           
     }
+}
+
+
+Enemy::Enemy(int startX, int startY, int finalX, int finalY, int speed)
+{
+     beginX = startX;
+     beginY = startY;
+     endX = finalX;
+     endY = finalY;
+     speed = 1;
+     radius = 5;
+
 }
 
 Player::Player(char a, int x, int y)
@@ -164,13 +178,37 @@ bool checkHit()
 void Enemy::moveEnemy()
 {
     // for all enemies on screen
+
     for(int i = 0; i < number_of_enemies; i++)
     {
         // move them one pixel down
-        // if it is at the edge, move it 
-        enemies[i].positionY ++;
-        
+        // if it is at the edge, move it
+        int enemyPosX = enemyArray[i].positionX;
+        int enemyPosY = enemyArray[i].positionY;
+        if(!checkEdge(enemyPosX,enemyPosY))
+        {
+            //if not at the edge, move the enemy
+            enemyArray[i].positionY ++;
+            // check if each enemy is at the ednge
+        }
+        else
+        {
+             //if it IS at the edge
+            // set the start to the former finish
+            /*
+            enemies[i].beginX = enemies[i].endX;
+            enemies[i].beginY = enemies[i].endY;*/
+            //for now, just set the position back to the start
+            enemyArray[i].positionX = enemyArray[i].beginX;
+            enemyArray[i].positionY = enemyArray[i].beginY;
+        }
+
     }
-    
+
 }
 
+void Enemy::displayEnemies()
+{
+
+    LCD.FillCircle(positionX, positionY, radius);
+}
