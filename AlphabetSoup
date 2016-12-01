@@ -54,8 +54,7 @@ int main(void) //Written by Andy
 
 void menu() //Written by Andy
 {
-    bool again = true;
-    //continuous loop managing main menu, will call play method or quit game
+    
    
         //main method display
         LCD.WriteLine("Welcome!\n");
