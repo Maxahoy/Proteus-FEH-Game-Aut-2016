@@ -44,10 +44,35 @@ Player p; //creating player object p
 Enemy enemyArray[number_of_enemies];
 
 
-int main(void)
+int main(void) //Written by Andy
 {
-    //main method stuff
-    play();
+    
+    bool again = true;
+    //continuous loop managing main menu, will call play method or quit game
+    while (again)
+    {
+        //main method display
+        LCD.WriteLine("Welcome!\n");
+        LCD.WriteLine("1.) New Game\n");
+        LCD.WriteLine("2.) Leaderboards\n");
+        LCD.WriteLine("3.) Quit");
+        
+        float xTouch, yTouch;
+        if (LCD.Touch(&xTouch, &yTouch))
+        {
+            if (xTouch<12*12 && (yTouch >17 && yTouch <= 17*2))
+                play();
+            else if (xTouch<12*16 && (yTouch >17*2 && yTouch <= 17*3))
+                //call leaderboard method
+            else if (xTouch<12*8 && (yTouch >17*3 && yTouch <= 17*4))
+            {
+                //LCD.DrawRectangle(80,90, 160, 60);
+                //LCD.WriteAt("Are you sure?", )
+                again=false;
+            }
+        }
+    }
+    
 }
 
 void play()
@@ -122,7 +147,7 @@ void Player::move()
     }
     else
     {
-        if (positionX+20>=319)
+        if (positionX+12>=319)
         {
              positionY-=y*10;
              if (x<0)
@@ -134,7 +159,7 @@ void Player::move()
              if (x>0)
                  positionX+=x*10;
         }
-        else if (positionY+12>=239)
+        else if (positionY+17>=239)
         {
              positionX+=x*10;
              if (y>0)
@@ -151,7 +176,7 @@ void Player::move()
 
 bool checkEdge(int x, int y)
 {
-    if((x <= 0 || x+ 12 >= 319) || (y <= 0 || y + 12 >= 239))
+    if((x <= 0 || x+ 12 >= 319) || (y <= 0 || y + 17 >= 239))
     {
         // if the x is less than zero or greater than 320 pixels, OR
         // if the y is less than zero or greater than 240 pixels
