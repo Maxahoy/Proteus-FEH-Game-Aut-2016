@@ -47,21 +47,21 @@ Enemy enemyArray[number_of_enemies];
 
 int main(void) //Written by Andy
 {
-    
+    LCD.Clear(BLACK);
     menu();
-    
+
 }
 
-void menu() //Written by Andy
+void menu()
 {
-    
-   
+
+
         //main method display
-        LCD.WriteLine("Welcome!\n");
-        LCD.WriteLine("1.) New Game\n");
-        LCD.WriteLine("2.) Leaderboards\n");
+        LCD.WriteLine("Welcome!");
+        LCD.WriteLine("1.) New Game");
+        LCD.WriteLine("2.) Leaderboards");
         LCD.WriteLine("3.) Quit");
-        
+
         float xTouch, yTouch;
         if (LCD.Touch(&xTouch, &yTouch))
         {
@@ -77,9 +77,8 @@ void menu() //Written by Andy
                 LCD.WriteLine("Goodbye");
             }
         }
-    }
+    
 }
-
 
 void play()
 {
