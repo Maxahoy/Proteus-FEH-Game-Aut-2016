@@ -5,10 +5,15 @@
 #include <stdlib.h>
 //#include <vector>
 
+#define number_of_enemies 15
+
 void play();
 bool checkHit();
 void display();
 bool checkEdge(int, int);
+float xTouch;
+float yTouch;
+
 void menu();
 
 class Player
@@ -25,25 +30,29 @@ private:
    // x is always less than 320 and y less than 240
 };
 
+
 class Enemy
 {
 public:
-    Enemy( int startx, int starty,int endx, int endy, int speed);
+    Enemy( int startx = 0, int starty =0, int endx= 0, int endy = 0, int speed = 0);
     void moveEnemy();
+    void displayEnemies();
 
 private:
     int positionX, positionY;// screen size is 320 by 240
     // x is always less than 320 and y less than 240
-    int speed = 1;// measured in pixels per cycle
+    int speed;// measured in pixels per cycle
     int beginX, beginY;
     int endX, endY;
-    int radius = 5; // measured in pixels; we'll display these later using
-    // FEHLCD .FillCircle
+    int radius;// measured in pixels; we'll display these later using
+    // FEHLCD .FillCircle will be used to draw them
 };
 
 Player p; //creating player object p
+
 Enemy enemyArray[number_of_enemies];
 
+int start;
 
 int main(void) //Written by Andy
 {
@@ -61,11 +70,13 @@ void menu()
         LCD.WriteLine("1.) New Game");
         LCD.WriteLine("2.) Leaderboards");
         LCD.WriteLine("3.) Quit");
-
         float xTouch, yTouch;
-        if (LCD.Touch(&xTouch, &yTouch))
+        bool test = true;
+        while(test)
         {
-            if (xTouch<12*12 && (yTouch >17 && yTouch <= 17*2))
+            if(LCD.Touch(&xTouch,&yTouch))
+            {
+            if (xTouch<(12*12) && (yTouch >17 && yTouch <= 17*2))
                 play();
             else if (xTouch<12*16 && (yTouch >17*2 && yTouch <= 17*3))
                 int unnecessary = 3;//call leaderboard method
@@ -75,30 +86,38 @@ void menu()
                 //LCD.WriteAt("Are you sure?", )
                 LCD.Clear(BLACK);
                 LCD.WriteLine("Goodbye");
+                test = false;
+            }
+
             }
         }
-    
+
 }
 
 void play()
 {
-    int start = TimeNow();
-    int end = TimeNow();
-    int mTime;
-    while(!checkHit())
-    {
-        LCD.Clear(BLUE);
-        p.display();//displaying every object at current location
+    // int start = TimeNow();
+        int end = TimeNow();
+        int mTime;
+        while(!checkHit())
+        {
+            LCD.Clear(BLUE);
+            p.display();//displaying every object at current location
+            for(int i = 0; i < number_of_enemies; i++)
+            {
+                enemyArray[i].displayEnemies();
+            }
 
-        mTime = TimeNow()-end; //getting time since last move
+            mTime = TimeNow()-end; //getting time since last move
 
-        p.move(); //updating location of player
-        //moveEnemies(mTime); //updating locaiton of every enemy with mTime affecting speed
+            p.move(); //updating location of player
+            //moveEnemies(mTime); //updating locaiton of every enemy with mTime affecting speed
 
-        end = TimeNow();//keeping track of total time
+            end = TimeNow();//keeping track of total time
 
-          
-       
+
+
+
     for(int i = 0; i < number_of_enemies; i++)
     {
         // start and end x should be between 0 and 319
@@ -109,9 +128,23 @@ void play()
         enemyArray[i] = Enemy(rand() % 320,0,rand() % 320, 239, 1);
         //
     }
-          
+
+
+
+        /*if((end-start)%2.==0)
+        {
+            enemyVector.add(Enemy(rand x, rand y, speed))
+        }*/
     }
 }
+
+Player::Player(char a, int x, int y)
+{
+    positionX = x;
+    positionY = y;
+    playerChar = a;
+}
+
 
 
 Enemy::Enemy(int startX, int startY, int finalX, int finalY, int speed)
@@ -124,19 +157,11 @@ Enemy::Enemy(int startX, int startY, int finalX, int finalY, int speed)
      radius = 5;
 
 }
-
-Player::Player(char a, int x, int y)
-{
-    positionX = x;
-    positionY = y;
-    playerChar = a;
-}
-
 void Player::display()
 {
 
     LCD.WriteAt(playerChar,positionX,positionY);
-    //for loop for each Enemy in enemyVector
+
 }
 
 void Player::move()
@@ -158,24 +183,25 @@ void Player::move()
              if (x<0)
                  positionX+=x*10;
         }
-        else if (positionX<=0)
-        {
-             positionY-=y*10;
-             if (x>0)
-                 positionX+=x*10;
-        }
-        else if (positionY+17>=239)
-        {
-             positionX+=x*10;
-             if (y>0)
-                 positionY-=y*10;
-        }
-        else if (positionY<=0)
+        if (positionY<=0)
         {
              positionX+=x*10;
              if (y<0)
                  positionY-=y*10;
         }
+        if (positionX<=0)
+        {
+             positionY-=y*10;
+             if (x>0)
+                 positionX+=x*10;
+        }
+        if (positionY+17>=239)
+        {
+             positionX+=x*10;
+             if (y>0)
+                 positionY-=y*10;
+        }
+
     }
 }
 
@@ -209,6 +235,9 @@ void Enemy::moveEnemy()
 {
     // for all enemies on screen
 
+    if(TimeNow() - start > .20)
+    {
+
     for(int i = 0; i < number_of_enemies; i++)
     {
         // move them one pixel down
@@ -234,6 +263,7 @@ void Enemy::moveEnemy()
         }
 
     }
+}
 
 }
 
