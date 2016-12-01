@@ -9,6 +9,7 @@ void play();
 bool checkHit();
 void display();
 bool checkEdge(int, int);
+void menu();
 
 class Player
 {
@@ -47,10 +48,15 @@ Enemy enemyArray[number_of_enemies];
 int main(void) //Written by Andy
 {
     
+    menu();
+    
+}
+
+void menu() //Written by Andy
+{
     bool again = true;
     //continuous loop managing main menu, will call play method or quit game
-    while (again)
-    {
+   
         //main method display
         LCD.WriteLine("Welcome!\n");
         LCD.WriteLine("1.) New Game\n");
@@ -63,17 +69,18 @@ int main(void) //Written by Andy
             if (xTouch<12*12 && (yTouch >17 && yTouch <= 17*2))
                 play();
             else if (xTouch<12*16 && (yTouch >17*2 && yTouch <= 17*3))
-                //call leaderboard method
+                int unnecessary = 3;//call leaderboard method
             else if (xTouch<12*8 && (yTouch >17*3 && yTouch <= 17*4))
             {
                 //LCD.DrawRectangle(80,90, 160, 60);
                 //LCD.WriteAt("Are you sure?", )
-                again=false;
+                LCD.Clear(BLACK);
+                LCD.WriteLine("Goodbye");
             }
         }
     }
-    
 }
+
 
 void play()
 {
