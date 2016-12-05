@@ -64,7 +64,7 @@ int main(void) //Written by Andy
 void menu()
 {
 
-
+        LCD.Clear(BLACK);
         //main method display
         LCD.WriteLine("Welcome!");
         LCD.WriteLine("1.) New Game");
