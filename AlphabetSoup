@@ -177,25 +177,57 @@ void Player::move()
     }
     else
     {
-        if (positionX+12>=319)
+        if (positionX+12>=319 && positionY<=0) //checking top right corner
+        {
+            if (x<0)
+                positionX+=x*10;
+            if (y<0)
+                positionY-=y*10;
+
+        }
+        else if (positionX+12>=319 && positionY+17>=239) //checking bottom right corner
+        {
+            if (x<0)
+                positionX+=x*10;
+            if (y>0)
+                positionY-=y*10;
+
+        }
+        else if (positionX<=0 && positionY<=0) //checking top left corner
+        {
+            if (x>0)
+                positionX+=x*10;
+            if (y<0)
+                positionY-=y*10;
+
+        }
+        else if (positionX<=0 && positionY+17>=0) //checking bottom left corner
+        {
+            if (x>0)
+                positionX+=x*10;
+            if (y>0)
+                positionY-=y*10;
+
+        }
+        else if (positionX+12>=319) // checking right side
         {
              positionY-=y*10;
              if (x<0)
                  positionX+=x*10;
         }
-        if (positionY<=0)
+        else if (positionY<=0)//checking top side
         {
              positionX+=x*10;
              if (y<0)
                  positionY-=y*10;
         }
-        if (positionX<=0)
+        else if (positionX<=0) //checking left side
         {
              positionY-=y*10;
              if (x>0)
                  positionX+=x*10;
         }
-        if (positionY+17>=239)
+        else if (positionY+17>=239) //checking bottom side
         {
              positionX+=x*10;
              if (y>0)
