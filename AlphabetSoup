@@ -12,8 +12,7 @@ bool checkHit();
 void display();
 bool checkEdge(int, int);
 void setStartPositions();
-float xTouch;
-float yTouch;
+
 
 void menu();
 
@@ -118,6 +117,12 @@ void play()
             end = TimeNow();//keeping track of total time
 
     }
+    
+    LCD.Clear(RED);
+    LCD.WriteLine("You Lose. Your score was:");
+    LCD.WriteLine(end);
+    Sleep(5.);
+    menu();
 }
 
 Player::Player(char a, int x, int y)
