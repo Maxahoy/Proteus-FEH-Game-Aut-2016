@@ -164,6 +164,16 @@ void Player::display()
     LCD.WriteAt(playerChar,positionX,positionY);
 
 }
+void Enemy::display()
+{
+    for (int i = 0; i < number_of_enemies; i++)
+    {
+        LCD.DrawRectangle(0,enemyArray[i].positionY,enemyArray[i].leftEdge, 4);
+        LCD.DrawRectangle(enemyArray[i].leftEdge+30, enemyArray[i].positionY,319-(enemyArray[i].leftEdge+30),4);
+        
+    }
+    
+}
 
 void Player::move()
 {
@@ -255,12 +265,11 @@ bool checkEdge(int x, int y)
 
 bool checkHit()
 {
-    /*for(each Enemy in enemyVector)
+    for (int i = 0; i < number_of_enemies; i++)
     {
-        if (p.positionX == e.positionX && p.positionY == e.positionY)
+        if(p.positionX<=enemyArray[i].leftEdge && (p.positionY >= enemyArray[i].positionY && p.positionY <= enemyArray[i].positionY+4))
             return true;
-    }*/
-
+    }
     return false;
 }
 void Enemy::moveEnemy()
@@ -278,9 +287,4 @@ void Enemy::moveEnemy()
         rightEdge = leftEdge + 30;
     }
 
-}
-void Enemy::displayEnemies()
-{
-
-    LCD.FillCircle(positionX, positionY, radius);
 }
