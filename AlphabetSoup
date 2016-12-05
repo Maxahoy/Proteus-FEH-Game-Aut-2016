@@ -11,6 +11,7 @@ void play();
 bool checkHit();
 void display();
 bool checkEdge(int, int);
+void setStartPositions();
 float xTouch;
 float yTouch;
 
@@ -141,6 +142,21 @@ Player::Player(char a, int x, int y)
     positionX = x;
     positionY = y;
     playerChar = a;
+}
+
+void setStartPositions()
+{
+    for(int i = 0; i < number_of_enemies; i++)
+    {
+        // for the first, set its position at the top of the screen
+        // for each subsequent, subtract its position by i multiples of ((1/number_of_enemies) * 240)
+        enemyArray[i].yPosition = (i*((1/number_of_enemies)*240));
+    }
+    
+    p1.positionX = 160;
+    p1.positionY = 120;
+    
+    
 }
 
 Enemy::Enemy(int posY, int SpeedNew, int leftEdgeNew, int rightEdgeNew)
