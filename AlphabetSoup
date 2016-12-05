@@ -5,7 +5,7 @@
 #include <stdlib.h>
 //#include <vector>
 
-#define number_of_enemies 15
+#define number_of_enemies 2
 
 void play();
 bool checkHit();
@@ -143,18 +143,23 @@ Player::Player(char a, int x, int y)
     playerChar = a;
 }
 
-
-
-Enemy::Enemy(int startX, int startY, int finalX, int finalY, int speed)
+Enemy::Enemy()
 {
-     beginX = startX;
-     beginY = startY;
-     endX = finalX;
-     endY = finalY;
-     speed = 1;
-     radius = 5;
 
+    //y position will depend on number of enemies;
+    positionY = 0;
+    speed = 1;
+    leftEdge = rand() % 289;
+    rightEdge = leftEdge + 30;
+
+    // y
 }
+
+Enemy::Enemy(positionY = 0, speed = 0, leftEdge = 0, rightEdge = 0)
+{
+    // this constructor method should not be called under any circumstances since the default constructor is what will be used in the program
+}
+
 void Player::display()
 {
 
@@ -260,43 +265,22 @@ bool checkHit()
 
     return false;
 }
-
 void Enemy::moveEnemy()
 {
-    // for all enemies on screen
+    // just increment the y position by the speed
 
-    if(TimeNow() - start > .20)
+    //if it is not touching the bottom edge
+    if(yPosition < 239)
     {
-
-    for(int i = 0; i < number_of_enemies; i++)
+        yPosition = yPosition + speed;
+    }else if(yPosition >= 239)// if it is at the bottom edge or below it, set to zero and create a new hole position
     {
-        // move them one pixel down
-        // if it is at the edge, move it
-        int enemyPosX = enemyArray[i].positionX;
-        int enemyPosY = enemyArray[i].positionY;
-        if(!checkEdge(enemyPosX,enemyPosY))
-        {
-            //if not at the edge, move the enemy
-            enemyArray[i].positionY ++;
-            // check if each enemy is at the ednge
-        }
-        else
-        {
-             //if it IS at the edge
-            // set the start to the former finish
-            /*
-            enemies[i].beginX = enemies[i].endX;
-            enemies[i].beginY = enemies[i].endY;*/
-            //for now, just set the position back to the start
-            enemyArray[i].positionX = enemyArray[i].beginX;
-            enemyArray[i].positionY = enemyArray[i].beginY;
-        }
-
+        yPosition = 0;
+        leftEdge = rand() % 289;
+        rightEdge = leftEdge + 30;
     }
-}
 
 }
-
 void Enemy::displayEnemies()
 {
 
