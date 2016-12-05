@@ -11,7 +11,7 @@ void play();
 bool checkHit();
 void display();
 bool checkEdge(int, int);
-void setStartPositions();
+
 
 
 void menu();
@@ -19,12 +19,12 @@ void menu();
 class Player
 {
 public:
-    Player(char = 'a', int = 50, int = 50);
+    Player(char = 'a', int = 160, int = 120);
     void move();
     void display();
 
 
-private:
+
     char playerChar;// the char for displaying the character
    int positionX, positionY;
    // x is always less than 320 and y less than 240
@@ -33,11 +33,12 @@ private:
 class Enemy
 {
 public:
-    Enemy(positionY = 0, speed = 0, leftEdge = 0, rightEdge = 0);
+    Enemy(int y = 0, int s = 1, int lEdge = rand() % 289, int rEdge = 0);
     void moveEnemy();
-    void dipslay();
+    void display();
+    void setStartPositions(int i);
 
-private:
+
     int positionY;// screen size is 320 by 240
     // x is always less than 320 and y less than 240
     int speed;// measured in pixels per cycle
@@ -54,6 +55,7 @@ int start;
 
 int main(void) //Written by Andy
 {
+
     LCD.Clear(BLACK);
     menu();
 
@@ -96,8 +98,10 @@ void play()
     // int start = TimeNow();
         int end = TimeNow();
         int mTime;
-        setStartPositions();
-
+        for(int i = 0; i < number_of_enemies; i++)
+        {
+            enemyArray[i].setStartPositions(i);
+        }
         while(!checkHit())
         {
             LCD.Clear(BLUE);
@@ -117,7 +121,7 @@ void play()
             end = TimeNow();//keeping track of total time
 
     }
-    
+
     LCD.Clear(RED);
     LCD.WriteLine("You Lose. Your score was:");
     LCD.WriteLine(end);
@@ -132,19 +136,16 @@ Player::Player(char a, int x, int y)
     playerChar = a;
 }
 
-void setStartPositions()
+void Enemy::setStartPositions(int i)
 {
-    for(int i = 0; i < number_of_enemies; i++)
-    {
+
         // for the first, set its position at the top of the screen
         // for each subsequent, subtract its position by i multiples of ((1/number_of_enemies) * 240)
-        enemyArray[i].yPosition = (i*((1/number_of_enemies)*240));
-    }
-    
-    p1.positionX = 160;
-    p1.positionY = 120;
-    
-    
+        positionY = (i*((1/number_of_enemies)*240));
+
+
+
+
 }
 
 Enemy::Enemy(int posY, int SpeedNew, int leftEdgeNew, int rightEdgeNew)
@@ -154,7 +155,7 @@ Enemy::Enemy(int posY, int SpeedNew, int leftEdgeNew, int rightEdgeNew)
     positionY = posY;
     speed = 1;
     leftEdge = leftEdgeNew;
-    rightEdge = rightEdgeNew;
+    rightEdge = leftEdgeNew+30;
 
 }
 
@@ -170,9 +171,9 @@ void Enemy::display()
     {
         LCD.DrawRectangle(0,enemyArray[i].positionY,enemyArray[i].leftEdge, 4);
         LCD.DrawRectangle(enemyArray[i].leftEdge+30, enemyArray[i].positionY,319-(enemyArray[i].leftEdge+30),4);
-        
+
     }
-    
+
 }
 
 void Player::move()
@@ -277,12 +278,12 @@ void Enemy::moveEnemy()
     // just increment the y position by the speed
 
     //if it is not touching the bottom edge
-    if(yPosition < 239)
+    if(positionY < 239)
     {
-        yPosition = yPosition + speed;
-    }else if(yPosition >= 239)// if it is at the bottom edge or below it, set to zero and create a new hole position
+        positionY = positionY + speed;
+    }else if(positionY >= 239)// if it is at the bottom edge or below it, set to zero and create a new hole position
     {
-        yPosition = 0;
+        positionY = 0;
         leftEdge = rand() % 289;
         rightEdge = leftEdge + 30;
     }
