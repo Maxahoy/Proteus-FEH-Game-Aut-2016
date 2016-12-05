@@ -30,22 +30,20 @@ private:
    // x is always less than 320 and y less than 240
 };
 
-
 class Enemy
 {
 public:
-    Enemy( int startx = 0, int starty =0, int endx= 0, int endy = 0, int speed = 0);
+    Enemy(positionY = 0, speed = 0, leftEdge = 0, rightEdge = 0);
     void moveEnemy();
     void displayEnemies();
 
 private:
-    int positionX, positionY;// screen size is 320 by 240
+    int positionY;// screen size is 320 by 240
     // x is always less than 320 and y less than 240
     int speed;// measured in pixels per cycle
-    int beginX, beginY;
-    int endX, endY;
-    int radius;// measured in pixels; we'll display these later using
-    // FEHLCD .FillCircle will be used to draw them
+    int leftEdge, rightEdge;
+
+
 };
 
 Player p; //creating player object p
