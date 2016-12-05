@@ -92,20 +92,23 @@ void menu()
         }
 
 }
-
 void play()
 {
     // int start = TimeNow();
         int end = TimeNow();
         int mTime;
+        setStartPositions();
+
         while(!checkHit())
         {
             LCD.Clear(BLUE);
             p.display();//displaying every object at current location
+
+            /*
             for(int i = 0; i < number_of_enemies; i++)
             {
                 enemyArray[i].displayEnemies();
-            }
+            }*/
 
             mTime = TimeNow()-end; //getting time since last move
 
@@ -114,26 +117,6 @@ void play()
 
             end = TimeNow();//keeping track of total time
 
-
-
-
-    for(int i = 0; i < number_of_enemies; i++)
-    {
-        // start and end x should be between 0 and 319
-        // start and end y should be between 0 and 239
-        // start x, start y, end x, end y, speed
-
-        // all enemies should start at the top and end at the bottom for now
-        enemyArray[i] = Enemy(rand() % 320,0,rand() % 320, 239, 1);
-        //
-    }
-
-
-
-        /*if((end-start)%2.==0)
-        {
-            enemyVector.add(Enemy(rand x, rand y, speed))
-        }*/
     }
 }
 
