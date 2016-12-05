@@ -35,7 +35,7 @@ class Enemy
 public:
     Enemy(positionY = 0, speed = 0, leftEdge = 0, rightEdge = 0);
     void moveEnemy();
-    void displayEnemies();
+    void dipslay();
 
 private:
     int positionY;// screen size is 320 by 240
