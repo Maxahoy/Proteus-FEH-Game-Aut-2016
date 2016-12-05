@@ -143,21 +143,15 @@ Player::Player(char a, int x, int y)
     playerChar = a;
 }
 
-Enemy::Enemy()
+Enemy::Enemy(int posY, int SpeedNew, int leftEdgeNew, int rightEdgeNew)
 {
 
     //y position will depend on number of enemies;
-    positionY = 0;
+    positionY = posY;
     speed = 1;
-    leftEdge = rand() % 289;
-    rightEdge = leftEdge + 30;
+    leftEdge = leftEdgeNew;
+    rightEdge = rightEdgeNew;
 
-    // y
-}
-
-Enemy::Enemy(positionY = 0, speed = 0, leftEdge = 0, rightEdge = 0)
-{
-    // this constructor method should not be called under any circumstances since the default constructor is what will be used in the program
 }
 
 void Player::display()
