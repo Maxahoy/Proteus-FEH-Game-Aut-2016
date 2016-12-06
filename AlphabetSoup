@@ -3,18 +3,20 @@
 #include <FEHUtility.h>
 #include <FEHAccel.h>
 #include <stdlib.h>
+//#include <algorithm>
 //#include <vector>
 
 #define number_of_enemies 2
 
 void play();
 bool checkHit();
-void display();
 bool checkEdge(int, int);
-
-
-
 void menu();
+void leaderboard();
+void sort(int []);
+void checkTouch(float *, float *);
+
+int scores[5];
 
 class Player
 {
@@ -51,7 +53,7 @@ Player p; //creating player object p
 
 Enemy enemyArray[number_of_enemies];
 
-int start;
+
 
 int main(void) //Written by Andy
 {
@@ -72,39 +74,52 @@ void menu()
         LCD.WriteLine("3.) Quit");
         float xTouch, yTouch;
         bool test = true;
+
         while(test)
         {
-            if(LCD.Touch(&xTouch,&yTouch))
-            {
-            if (xTouch<(12*12) && (yTouch >17 && yTouch <= 17*2))
+            checkTouch(&xTouch, &yTouch);
+            //LCD.WriteLine(xTouch);
+            //LCD.WriteLine(yTouch);
+            //Sleep(5.);
+
+            if (xTouch<(12*12) && (yTouch >17 + 17 && yTouch <= 17*2 + 17))
                 play();
-            else if (xTouch<12*16 && (yTouch >17*2 && yTouch <= 17*3))
-                int unnecessary = 3;//call leaderboard method
-            else if (xTouch<12*8 && (yTouch >17*3 && yTouch <= 17*4))
+            else if (xTouch<12*16 && (yTouch >17*2 + 17 && yTouch <= 17*3 + 17))
+                leaderboard();
+            else if (xTouch<12*8 && (yTouch >17*3 + 17 && yTouch <= 17*4 + 17))
             {
-                //LCD.DrawRectangle(80,90, 160, 60);
-                //LCD.WriteAt("Are you sure?", )
+                test=false;
                 LCD.Clear(BLACK);
                 LCD.WriteLine("Goodbye");
-                test = false;
-            }
 
             }
         }
+
+
+
 
 }
+void checkTouch(float *x,float *y)
+{
+    while(!LCD.Touch(x,y))
+    {
+        int stuff = 0;//nothing
+    }
+    return;
+}
+
 void play()
 {
-    // int start = TimeNow();
-        int end = TimeNow();
-        int mTime;
+
+
+
         for(int i = 0; i < number_of_enemies; i++)
         {
-            enemyArray[i].setStartPositions(i); // THERE IS AN ISSUE HERE THAT I JUST NOTICED;
-            // it should be using setStartPositions(number_of_enemies)
-            // I didn't want to just change it on github and wonder what changed tho, hence comments
-            // -maxwell
+            enemyArray[i].setStartPositions(i);
         }
+        int start = TimeNow();
+        int end;
+        int score = 0;
         while(!checkHit())
         {
             LCD.Clear(BLUE);
@@ -116,18 +131,26 @@ void play()
                 enemyArray[i].moveEnemy();
             }
 
-            mTime = TimeNow()-end; //getting time since last move
+
 
             p.move(); //updating location of player
             //moveEnemies(mTime); //updating locaiton of every enemy with mTime affecting speed
 
-            end = TimeNow();//keeping track of total time
 
-    }
+            //score++;
+        }
+        end = TimeNow();//keeping track of total time
+
+        score = end-start;
+
+        if (score > scores[4])
+            scores[4] = score;
+        sort(scores);
+        //sort(scores);
 
     LCD.Clear(RED);
     LCD.WriteLine("You Lose. Your score was:");
-    LCD.WriteLine(end);
+    LCD.WriteLine(score);
     Sleep(5.);
     menu();
 }
@@ -144,7 +167,8 @@ void Enemy::setStartPositions(int i)
 
         // for the first, set its position at the top of the screen
         // for each subsequent, subtract its position by i multiples of ((1/number_of_enemies) * 240)
-        positionY = (i*((1/number_of_enemies)*240));
+        positionY = (-i*((1.0/number_of_enemies)*240.0));
+        speed = 1;
 
 
 
@@ -170,12 +194,13 @@ void Player::display()
 }
 void Enemy::display()
 {
-    for (int i = 0; i < number_of_enemies; i++)
-    {
-        LCD.DrawRectangle(0,enemyArray[i].positionY,enemyArray[i].leftEdge, 4);
-        LCD.DrawRectangle(enemyArray[i].leftEdge+30, enemyArray[i].positionY,319-(enemyArray[i].leftEdge+30),4);
 
-    }
+        if (positionY>=0)
+        {
+            LCD.DrawRectangle(0,positionY,leftEdge, 7);
+            LCD.DrawRectangle(leftEdge+30, positionY,319-(leftEdge+30),7);
+        }
+
 
 }
 
@@ -271,7 +296,9 @@ bool checkHit()
 {
     for (int i = 0; i < number_of_enemies; i++)
     {
-        if(p.positionX<=enemyArray[i].leftEdge && (p.positionY >= enemyArray[i].positionY && p.positionY <= enemyArray[i].positionY+4))
+        if(p.positionX<=enemyArray[i].leftEdge && (p.positionY >= enemyArray[i].positionY && p.positionY <= enemyArray[i].positionY+7))
+            return true;
+        else if(p.positionX>=enemyArray[i].rightEdge && (p.positionY >= enemyArray[i].positionY && p.positionY <= enemyArray[i].positionY+7))
             return true;
     }
     return false;
@@ -289,6 +316,52 @@ void Enemy::moveEnemy()
         positionY = 0;
         leftEdge = rand() % 289;
         rightEdge = leftEdge + 30;
+        for (int i = 0; i < number_of_enemies; i++)
+        {
+            if(speed<=5)
+                    enemyArray[i].speed++;
+        }
     }
 
 }
+
+void sort(int s[])
+{
+    int temp;
+    for (int x = 0; x < 4; x++)
+    {
+        for (int i = 4; i > x; i--)
+        {
+            if (s[i]>s[i-1])
+            {
+                temp = s[i];
+                s[i] = s[i-1];
+                s[i-1] = temp;
+            }
+        }
+    }
+}
+
+void leaderboard()
+{
+    LCD.Clear(BLACK);
+    LCD.WriteLine("Current High Scores");
+    for (int i = 0; i < 5; i++)
+    {
+        LCD.Write(i+1); LCD.Write(".) "); LCD.WriteLine(scores[i]);
+    }
+    LCD.WriteLine("Return");
+    float xTouch, yTouch;
+    bool test = true;
+    while(test)
+    {
+        checkTouch(&xTouch, &yTouch);
+            if (xTouch<(12*6) && (yTouch >17*6 && yTouch <= 17*7))
+            {
+                test = false;
+                menu();
+            }
+    }
+
+}
+
